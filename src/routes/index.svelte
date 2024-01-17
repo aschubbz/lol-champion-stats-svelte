@@ -20,7 +20,19 @@
 
 	let level = 1;
 	let sort = 'name';
-	let desc = true;
+	let desc = 1;
+	const columns = [
+		['name', 'Champion'],
+		['healthbar', 'Health Bar'],
+		['health', 'Health'],
+		['healthRegen', 'Health / 5'],
+		['armor', 'Armor'],
+		['magicResistance', 'MR'],
+		['attackDamage', 'AD'],
+		['attackSpeed', 'AS'],
+		['mana', 'Mana'],
+		['manaRegen', 'Mana / 5']
+	];
 
 	function setLevel(lvl) {
 		level = lvl;
@@ -58,14 +70,15 @@
 				manaRegen: statAtLevel(manaRegen.flat, manaRegen.perLevel, level)
 			};
 		})
-		.sort((a, b) => (sort === 'name' ? a.name.localeCompare(b[sort]) : a[sort] - b[sort]) * (desc ? 1 : -1));
+		.sort((a, b) => (sort === 'name' ? a.name.localeCompare(b[sort]) : a[sort] - b[sort]) * desc);
 
-	function setSort(col, desc) {
+	function toggleSort(col) {
 		if (sort === col) {
-			desc = !desc;
+			desc = -desc;
 			return;
 		}
 		sort = col;
+		desc = 1;
 	}
 
 	$: console.log(data);
@@ -75,17 +88,11 @@
 
 <table>
 	<tr>
-		<th on:click={() => setSort('name')} scope="col">Champion</th>
-		<th on:click={() => (sort = '', desc = !desc)} scope="col">Health bar</th>
-		<th on:click={() => (sort = 'health', desc = !desc)} scope="col">Health</th>
-		<th on:click={() => (sort = 'healthRegen', desc = !desc)} scope="col">Health / 5</th>
-		<th on:click={() => (sort = 'armor', desc = !desc)} scope="col">Armor</th>
-		<th on:click={() => (sort = 'magicResistance', desc = !desc)} scope="col">MR</th>
-		<th on:click={() => (sort = 'attackDamage', desc = !desc)} scope="col">AD</th>
-		<th on:click={() => (sort = 'attackSpeed', desc = !desc)} scope="col">AS</th>
-		<th on:click={() => (sort = 'mana', desc = !desc)} scope="col">Mana</th>
-		<th on:click={() => (sort = 'manaRegen', desc = !desc)} scope="col">Mana / 5</th>
+		{#each columns as column}
+			<th on:click={() => toggleSort(column[0])} scope="col">{column[1]}</th>
+		{/each}
 	</tr>
+
 	{#each champions as champion}
 		{@const {
 			icon,

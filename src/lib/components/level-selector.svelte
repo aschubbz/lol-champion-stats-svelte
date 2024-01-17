@@ -6,6 +6,7 @@
 </script>
 
 <ol>
+	Select Champion Level:
 	{#each LVLS as lvl}
 		<li><button on:click={() => setLevel(lvl)} class:active={level === lvl}>{lvl}</button></li>
 	{/each}
@@ -13,6 +14,7 @@
 
 <style lang="scss">
 	ol {
+		align-items: center;
 		display: flex;
 		list-style: none;
 		margin: 0;
